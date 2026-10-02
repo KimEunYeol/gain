@@ -1,6 +1,6 @@
 # Gain 보안 및 무료 운영 검토
 
-2026-10-03 KST. WSL `/home/eykim/projects/Gain`만 변경했다. Windows 원본, 운영 DB, 공급자 설정은 변경하지 않았다. 커밋/푸시는 부모 검토 후 진행한다.
+2026-10-03 KST. WSL `/home/eykim/projects/Gain`만 변경했다. Windows 원본, 운영 DB, 공급자 설정은 변경하지 않았다. 초기 구현 게시를 부모가 완료했다. 현재 문서 정정은 위임된 커밋·푸시로 반영하며 운영 배포/SQL 적용은 하지 않는다.
 
 ## 실제 설정과 정정
 
@@ -35,14 +35,18 @@
 
 브라우저 검증에서 외부 Google Fonts CSS import가 CSP와 충돌하는 것을 확인해 제거했다. 운영체제 기본 한글 폰트 fallback을 사용하며 기본 화면은 외부 요청 없이 렌더링한다.
 
-최종 검증: frozen install 및 pnpm verify 전체 성공, Node negative tests 15개 + 격리 PostgreSQL RLS/쿼터 테스트 성공, 전체 의존성 audit 취약점 없음. Desktop1280×900 / mobile390×844 각 5경로 HTTP200, 가로 넘침 없음, 외부 요청·클라이언트 오류 없음, 관리자 로그인/쓰기 차단 확인. CSP 포함 보안 헤더 검증 완료. 빌드의 728.91kB 관리자 청크 경고는 남는다. 커밋·푸시·배포는 아직 하지 않았다. Git 이력 검사는 현재 비어 있는 이력에서 통과했으며 부모가 커밋 후 재검사해야 한다.
+최종 검증: frozen install 및 pnpm verify 전체 성공, Node negative tests 15개 + 격리 PostgreSQL RLS/쿼터 테스트 성공, 전체 의존성 audit 취약점 없음. Desktop1280×900 / mobile390×844 각 5경로 HTTP200, 가로 넘침 없음, 외부 요청·클라이언트 오류 없음, 관리자 로그인/쓰기 차단 확인. CSP 포함 보안 헤더 검증 완료. 빌드의 728.91kB 관리자 청크 경고는 남는다. 이 문단의 로컬 검증 당시에는 커밋·푸시 전이었고 이력은 비어 있었다. 이후 부모가 초기 코드를 게시했으며 Git 이력 검사는 게시 단계와 이번 문서 푸시 hook에서 다시 수행한다. 운영 배포는 하지 않았다.
 
 부모 운영 메타데이터 조회 추가 근거: public의 broods/completions/fish/photos/profiles/records/schedules/tanks 8개 테이블은 RLS=true이며 관측된 정책은 authenticated + auth.uid() 소유자 비교였다. public.photos는 Iam9P read_own SELECT 정책이 확인됐다. gain 스키마 테이블은 존재하지 않아 검토 SQL 미적용이 실제 metadata로 확인됐다. 조회는 스키마/정책 metadata만 대상으로 했고 사용자 데이터 조회나 운영 SQL 변경은 없었다. Storage 정책 전체 검증은 별도 남는다.
 
 ## 상위 세션 최종 게시 검토
 
-2026-10-03: 공식 릴리스 SHA-256을 검증한 Gitleaks 8.30.1로 Git에 스테이징된 파일의 분리된 사본과 기존 전체 이력을 추가 검사했으며 발견 항목은 없었다. 공통 검사기에 Groq, Supabase 관리 토큰과 Vercel 토큰 탐지를 보강했다. 파일 권한은 소스 644 / Git hooks 755로 정리하고 UTF-8 LF 기준의 diff 검사를 통과시켰다. 최종 게시 커밋은 푸시 전에 verify와 이력 검사를 다시 통과해야 한다. 비공개 GitHub 게시와 운영 배포·SQL 적용은 별도 상태다.
+2026-10-03: 공식 릴리스 SHA-256을 검증한 Gitleaks 8.30.1로 Git에 스테이징된 파일의 분리된 사본과 기존 전체 이력을 추가 검사했으며 발견 항목은 없었다. 공통 검사기에 Groq, Supabase 관리 토큰과 Vercel 토큰 탐지를 보강했다. 파일 권한은 소스 644 / Git hooks 755로 정리하고 UTF-8 LF 기준의 diff 검사를 통과시켰다. 부모가 초기 게시 커밋 44a6cdedc3aeae42540878bdd33a5199d4b6585d를 main에 게시 완료했다고 확인했다. 후속 문서 커밋도 푸시 전에 verify와 이력 검사를 통과해야 한다. 비공개 GitHub 게시와 운영 배포·SQL 적용은 별도 상태다.
 
 최종 공유 저장량 예산 정정: Gain 검토 SQL은 125개/250MiB 예약 한도다. Iam9P에도 부모가 동일한 125개/250MiB 한도를 적용할 예정이므로 공유 합계는 500MiB로 설계한다. 실제 현재 저장량·다른 버킷·전송량은 별도 확인해야 하며 이는 공급자 전체 비용 보장이 아니다. 기존 public용 SQL 이력의 과거 800MiB 수치는 수정하지 않고 새 격리 검토안에만 낮춘 한도를 적용했다. 검토 SQL 전체는 하나의 BEGIN/COMMIT이며 마지막 구문에서 의도적으로 실패시켜 gain 스키마·버킷·정책이 모두 롤백되고 public.photos가 보존되는지 격리 PostgreSQL로 검사한다. 운영 미적용 상태는 유지한다.
 
 최종 한도 정정 후 pnpm verify(15개 Node 테스트+격리 SQL 실패 전체 롤백/RLS/125개·250MiB 경계/회수 테스트/빌드), pnpm audit --audit-level=high 통과. 기존 AGENTS·공통 scanner·LF 및 파일644/hooks755를 보존하고 관련 파일만 재스테이징했다.
+
+## 현재 안내 문서 정정 (2026-10-03)
+
+README 본문의 새 프로젝트·관리 계정 생성·public SQL 적용·로그인 편집·직접 배포 안내를 현재 절차에서 제거했다. 최초 실행은 연결 없는 fallback이다. 기대 프로젝트 설정은 익명 읽기 조건일 뿐 immutable 로그인/쓰기/업로드 차단을 해제하지 않는다. 운영 기록은 날짜가 있는 과거 증거로 보존하며 현재 절차와 분리했다. 이 문서 정정은 코드·SQL·운영 설정·.env.local 변경 없이 수행한다.
