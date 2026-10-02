@@ -1,0 +1,81 @@
+{
+  "checkedAt": "2026-10-02T01:48:01.462Z",
+  "remote": {
+    "name": "gain-music-club",
+    "origin": "https://gain-music-club.vercel.app",
+    "settings": {
+      "id": "prj_D9HzkGXhdo1jZMEr26e5Ndjzsm3e",
+      "nodeVersion": "24.x",
+      "framework": null,
+      "buildCommand": null,
+      "installCommand": null,
+      "gitLink": null
+    },
+    "environment": [],
+    "deployments": [
+      {
+        "id": "dpl_4aqwDmft5nbvWW11bqUXy7CrZApU",
+        "state": "READY",
+        "url": "gain-music-club-mgvxnx4pj-kimeunyeols-projects.vercel.app",
+        "created": 1790664816197,
+        "commit": null
+      },
+      {
+        "id": "dpl_FhzBqD4FsDUwKr9tuKwnqm62JwLB",
+        "state": "READY",
+        "url": "gain-music-club-ppy8nt1xd-kimeunyeols-projects.vercel.app",
+        "created": 1790510723045,
+        "commit": null
+      },
+      {
+        "id": "dpl_ABvBYshJaJumGUpQ8qFd4ampiKzQ",
+        "state": "READY",
+        "url": "gain-music-club-j8qrwm0di-kimeunyeols-projects.vercel.app",
+        "created": 1790510645210,
+        "commit": null
+      }
+    ],
+    "public": {
+      "status": 200,
+      "finalUrl": "https://gain-music-club.vercel.app/",
+      "headers": {
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "referrer-policy": "strict-origin-when-cross-origin",
+        "permissions-policy": "camera=(), microphone=(), geolocation=()",
+        "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+        "content-security-policy": null
+      }
+    }
+  },
+  "initialDependencyAudit": {
+    "project": "Gain",
+    "checkedAt": "2026-10-02T01:55:23.872Z",
+    "exitCode": 0,
+    "counts": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0
+    },
+    "advisories": [],
+    "error": null
+  },
+  "note": "Initial read-only observation. Local code/dependencies may change in the separate code session; revalidate before release.",
+  "latestLocalDependencyAudit": {
+    "project": "Gain",
+    "checkedAt": "2026-10-02T02:05:30.442Z",
+    "exitCode": 0,
+    "counts": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0
+    },
+    "advisories": [],
+    "error": null
+  },
+  "finalLocalValidation": "최종: TypeScript·7개 테스트·감사·Vite 빌드 통과. 배포 플래그/별도 환경 파일 없이 실행하면 인증/업로드 전에 중단하는 것을 확인했다. 초기 esbuild 샌드박스 권한 오류는 승인된 로컬 검증 환경에서 재검증해 해소됐다. 린트 도구는 미구성. 운영 배포는 미실행."
+}

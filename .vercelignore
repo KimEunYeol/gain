@@ -1,0 +1,12 @@
+node_modules/
+.env*
+.git/
+.deployment/
+.vercel/
+.pnpm-store/
+test-results/
+
+# Original source photos and local runtime evidence stay private.
+/*.jpg
+.wsl-migration/
+.openai/

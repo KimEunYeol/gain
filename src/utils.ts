@@ -1,0 +1,8 @@
+export const categories = ['정모', '보컬 연습', '소공연', '대공연'] as const;
+export function safeUrl(value: string): string { try { const u = new URL(value); return u.protocol === 'https:' && !u.username && !u.password && !u.port ? u.href : ''; } catch { return ''; } }
+export function videoUrl(value: string): string { const safe = safeUrl(value); if (!safe) return ''; const host = new URL(safe).hostname; return ['youtube.com', 'www.youtube.com', 'youtu.be', 'm.youtube.com', 'instagram.com', 'www.instagram.com'].includes(host) ? safe : ''; }
+export function koreanDay(value: string | Date): string { return new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(value)); }
+export function dateLabel(value: string | null, time = true): string { if (!value) return '일정 미정'; return new Intl.DateTimeFormat('ko-KR', { timeZone: 'Asia/Seoul', year: 'numeric', month: 'long', day: 'numeric', weekday: 'short', ...(time ? { hour: '2-digit', minute: '2-digit', hour12: false } as const : {}) }).format(new Date(value)); }
+export function toLocalInput(value: string | null): string { if (!value) return ''; const d = new Date(new Date(value).getTime() + 9 * 3600000); return d.toISOString().slice(0, 16); }
+export function fromLocalInput(value: string): string | null { return value ? new Date(value + ':00+09:00').toISOString() : null; }
+export function monthCells(year: number, month: number): (number | null)[] { const first = new Date(Date.UTC(year, month, 1)).getUTCDay(); const days = new Date(Date.UTC(year, month + 1, 0)).getUTCDate(); const size = Math.ceil((first + days) / 7) * 7; return Array.from({ length: size }, (_, i) => i >= first && i < first + days ? i - first + 1 : null); }
